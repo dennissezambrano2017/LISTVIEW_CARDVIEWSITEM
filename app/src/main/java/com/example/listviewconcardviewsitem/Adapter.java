@@ -39,9 +39,11 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         Usuario actual = elista.get(position);
 
         String desconocido = "https://www.prensalibre.com/wp-content/uploads/2019/05/1467646262_522853_1467646344_noticia_normal.jpg?quality=82&w=664";
+        int Cedula = actual.getIdevaluado();
         String Nombre = actual.getNombres();
         String Area = actual.getArea();
 
+        holder.mCedula.setText("CEDULA: "+Cedula);
         holder.mNombre.setText("NOMBRES: "+Nombre);
         holder.mArea.setText("CARGO: "+Area);
 
@@ -69,8 +71,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder{
 
         public ImageView eImagen;
-        public TextView mNombre;
-        public TextView mArea;
+        public TextView mNombre,mArea, mCedula;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -78,6 +79,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             eImagen =itemView.findViewById(R.id.imagen_vista);
             mNombre =itemView.findViewById(R.id.text_Nombre);
             mArea =itemView.findViewById(R.id.text_Area);
+            mCedula = itemView.findViewById(R.id.text_Cedula);
         }
     }
 

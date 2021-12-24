@@ -5,11 +5,14 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
+import android.text.Editable;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.android.volley.NoConnectionError;
@@ -49,6 +52,17 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         stringRequest();
+    }
+    public void btnEvaluados(View view){
+        Intent intent = new Intent(MainActivity.this,Main_elements_evaluados.class);
+        TextView txtCedula = (TextView)findViewById(R.id.text_Cedula);
+        Bundle datos = new Bundle();
+        datos.putString("cedula", txtCedula.getText().toString());
+        Log.d("DATOS", txtCedula.getText().toString());
+        intent.putExtras(datos);
+
+        startActivity(intent);
+
     }
 
 

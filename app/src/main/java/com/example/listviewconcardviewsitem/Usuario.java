@@ -13,11 +13,6 @@ public class Usuario {
 
     private int idevaluado;
     private String nombres;
-    private String genero;
-    private String situacion;
-    private String cargo;
-    private Date FechaInicio;
-    private Date FechaFin;
     private String urlImag;
     private String ImagAvatar;
     private String Area;
@@ -25,22 +20,12 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario( String nombres, String urlImag, String imagAvatar, String area) {
+    public Usuario( int idevaluado, String nombres, String urlImag, String imagAvatar, String area) {
+        this.idevaluado = idevaluado;
         this.nombres = nombres;
         this.urlImag = urlImag;
         ImagAvatar = imagAvatar;
         Area = area;
-    }
-
-    public Usuario(String nombres, String genero, String situacion, String cargo, Date fechaInicio, Date fechaFin, String urlImag, String imagAvatar) {
-        this.nombres = nombres;
-        this.genero = genero;
-        this.situacion = situacion;
-        this.cargo = cargo;
-        FechaInicio = fechaInicio;
-        FechaFin = fechaFin;
-        this.urlImag = urlImag;
-        ImagAvatar = imagAvatar;
     }
 
     public int getIdevaluado() {
@@ -57,46 +42,6 @@ public class Usuario {
 
     public void setNombres(String nombres) {
         this.nombres = nombres;
-    }
-
-    public String getGenero() {
-        return genero;
-    }
-
-    public void setGenero(String genero) {
-        this.genero = genero;
-    }
-
-    public String getSituacion() {
-        return situacion;
-    }
-
-    public void setSituacion(String situacion) {
-        this.situacion = situacion;
-    }
-
-    public String getCargo() {
-        return cargo;
-    }
-
-    public void setCargo(String cargo) {
-        this.cargo = cargo;
-    }
-
-    public Date getFechaInicio() {
-        return FechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        FechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFin() {
-        return FechaFin;
-    }
-
-    public void setFechaFin(Date fechaFin) {
-        FechaFin = fechaFin;
     }
 
     public String getUrlImag() {
@@ -129,11 +74,14 @@ public class Usuario {
         for (int i = 0; i < datos.length(); i++) {
             JSONObject user=  datos.getJSONObject(i);
             Log.d("DATOS", user.toString());
-            usuarios.add(new Usuario(user.getString("nombres"),
+            usuarios.add(new Usuario(user.getInt("idevaluador"),
+                    user.getString("nombres"),
                     user.getString("imgJPG"),
                     user.getString("imgjpg"),
                     user.getString("area")));
         }
         return usuarios;
     }
+
+
 }
