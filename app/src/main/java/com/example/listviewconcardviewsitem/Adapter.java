@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 
 
@@ -21,7 +22,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
     private Context econtext;
     private ArrayList<Usuario> elista;
-
     public Adapter (Context contex, ArrayList<Usuario> lusuario){
         econtext = contex;
        this.elista = lusuario;
@@ -82,5 +82,6 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
             mCedula = itemView.findViewById(R.id.text_Cedula);
         }
     }
+
 
 }
