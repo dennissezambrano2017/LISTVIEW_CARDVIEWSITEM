@@ -1,16 +1,19 @@
 package com.example.listviewconcardviewsitem;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -19,18 +22,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     private Context econtext;
     private ArrayList<Usuario> elista;
 
-    public Adapter() {
-    }
-
     public Adapter (Context contex, ArrayList<Usuario> lusuario){
         econtext = contex;
-        elista = lusuario;
+       this.elista = lusuario;
     }
 
-    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(econtext).inflate(R.layout.elements,parent,false);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(econtext);
+        View v = inflater.inflate(R.layout.elements,null);
         return new ViewHolder(v);
     }
 
@@ -38,14 +38,26 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Usuario actual = elista.get(position);
 
-        String urlImag = actual.getUrlImag();
+        String desconocido = "https://www.prensalibre.com/wp-content/uploads/2019/05/1467646262_522853_1467646344_noticia_normal.jpg?quality=82&w=664";
         String Nombre = actual.getNombres();
-        String Cargo = actual.getCargo();
+        String Area = actual.getArea();
 
-        holder.mNombre.setText("Nombre: "+Nombre);
-        holder.mCargo.setText("Cargo: "+Cargo);
+        holder.mNombre.setText("NOMBRES: "+Nombre);
+        holder.mArea.setText("CARGO: "+Area);
 
-        Picasso.with(econtext).load(urlImag).fit().centerInside().into(holder.eImagen);
+        try{
+            Glide.with(econtext)
+                    .load(actual.getImagAvatar())
+                    .placeholder(R.drawable.ic_launcher_background)
+                    .error(Glide.with(econtext)
+                            .load(actual.getUrlImag())
+                            .error(Glide.with(econtext)
+                                    .load(desconocido)))
+                    .into(holder.eImagen);
+            Log.d("UrlImag:",actual.getUrlImag());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
 
     }
 
@@ -58,14 +70,14 @@ public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
 
         public ImageView eImagen;
         public TextView mNombre;
-        public TextView mCargo;
+        public TextView mArea;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             eImagen =itemView.findViewById(R.id.imagen_vista);
             mNombre =itemView.findViewById(R.id.text_Nombre);
-            mCargo =itemView.findViewById(R.id.text_Area);
+            mArea =itemView.findViewById(R.id.text_Area);
         }
     }
 

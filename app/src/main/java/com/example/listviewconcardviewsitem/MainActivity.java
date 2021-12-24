@@ -1,20 +1,24 @@
 package com.example.listviewconcardviewsitem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.Intent;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.android.volley.NoConnectionError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         lstEvalua = (RecyclerView) findViewById(R.id.lst_Evaluadores);
         lstEvalua.setHasFixedSize(true);
         lstEvalua.setLayoutManager( new LinearLayoutManager(this));
+        lstEvalua.setItemAnimator(new DefaultItemAnimator());
 
         listaEva = new ArrayList<>();
 
@@ -51,32 +56,46 @@ public class MainActivity extends AppCompatActivity {
 
         String urlEvaluador ="https://www.uealecpeterson.net/ws/listadoevaluadores.php";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, urlEvaluador, null,
-                new Response.Listener<JSONObject>() {
+        StringRequest request = new StringRequest(Request.Method.GET,
+                urlEvaluador,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
                         try {
-                            JSONArray jsonArray = response.getJSONArray("listaaevaluador");
+                            JSONObject object = new JSONObject(response);
+                            JSONArray jsonArray=  object.getJSONArray("listaaevaluador");
 
-                            for (int i = 0; i < jsonArray.length(); i++) {
-                                JSONObject data = jsonArray.getJSONObject(i);
-                                String Nombre =(String) data.get("nombres");
-                                String Cargo = (String) data.get("area");
-                                String Url = urlEvaluador;
+                            listaEva = Usuario.JsonObjectsBuild(jsonArray);
+                            Adapter adapter = new Adapter(getApplicationContext(),listaEva);
+                            int resId = R.anim.layout_animation_down_to_up;
+                            LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getApplicationContext(),
+                                    resId);
+                            lstEvalua.setLayoutAnimation(animation);
 
-                                usuario = new Usuario(Nombre,Cargo,Url);
-                            }
-                            listaEva.add(usuario);
-                        } catch (JSONException e) {
+                            lstEvalua.setAdapter(adapter);
+
+
+                        }catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-              error.printStackTrace();
-            }
-        });
+                },
+                new Response.ErrorListener() {
+                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                    }
+                    public void onErrorResponse(final VolleyError error) {
+                        if(error.networkResponse == null
+                                && error instanceof NoConnectionError
+                                && error.getMessage().contains("javax.net.ssl.SSLHandshakeException"))
+                        {
+                            // Se ha producido un error con el certificado SSL y la conexión ha sido
+                            // rechazada
+                        }
+                    }
+                }
+        );
         requestQueue.add(request);
     }
 }

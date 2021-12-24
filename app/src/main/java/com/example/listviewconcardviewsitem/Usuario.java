@@ -1,5 +1,12 @@
 package com.example.listviewconcardviewsitem;
 
+import android.util.Log;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Usuario {
@@ -12,18 +19,20 @@ public class Usuario {
     private Date FechaInicio;
     private Date FechaFin;
     private String urlImag;
+    private String ImagAvatar;
+    private String Area;
 
     public Usuario() {
     }
 
-    public Usuario(String nombres, String cargo, String urlImag) {
+    public Usuario( String nombres, String urlImag, String imagAvatar, String area) {
         this.nombres = nombres;
-        this.cargo = cargo;
         this.urlImag = urlImag;
+        ImagAvatar = imagAvatar;
+        Area = area;
     }
 
-    public Usuario(int idevaluado, String nombres, String genero, String situacion, String cargo, Date fechaInicio, Date fechaFin, String urlImag) {
-        this.idevaluado = idevaluado;
+    public Usuario(String nombres, String genero, String situacion, String cargo, Date fechaInicio, Date fechaFin, String urlImag, String imagAvatar) {
         this.nombres = nombres;
         this.genero = genero;
         this.situacion = situacion;
@@ -31,6 +40,7 @@ public class Usuario {
         FechaInicio = fechaInicio;
         FechaFin = fechaFin;
         this.urlImag = urlImag;
+        ImagAvatar = imagAvatar;
     }
 
     public int getIdevaluado() {
@@ -95,5 +105,35 @@ public class Usuario {
 
     public void setUrlImag(String urlImag) {
         this.urlImag = urlImag;
+    }
+
+    public String getImagAvatar() {
+        return ImagAvatar;
+    }
+
+    public void setImagAvatar(String imagAvatar) {
+        ImagAvatar = imagAvatar;
+    }
+
+    public String getArea() {
+        return Area;
+    }
+
+    public void setArea(String area) {
+        Area = area;
+    }
+
+    public static ArrayList<Usuario> JsonObjectsBuild(JSONArray datos) throws JSONException {
+        ArrayList<Usuario> usuarios = new ArrayList<>();
+        ArrayList <String> lis = new ArrayList<>();
+        for (int i = 0; i < datos.length(); i++) {
+            JSONObject user=  datos.getJSONObject(i);
+            Log.d("DATOS", user.toString());
+            usuarios.add(new Usuario(user.getString("nombres"),
+                    user.getString("imgJPG"),
+                    user.getString("imgjpg"),
+                    user.getString("area")));
+        }
+        return usuarios;
     }
 }
